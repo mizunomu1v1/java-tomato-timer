@@ -1,9 +1,8 @@
-package controller;
+package com.puipui.tomato.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.puipui.tomato.controller.TomatoApi;
 import com.puipui.tomato.model.TomatoDTO;
 import com.puipui.tomato.model.TomatoForm;
 
