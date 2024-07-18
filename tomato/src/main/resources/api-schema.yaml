@@ -1,0 +1,110 @@
+openapi: "3.0.0"
+info:
+  title: TOMATO Timer Document
+  version: "0.0.1"
+  description: ポモドーロタイマAPIのドキュメントです。
+tags:
+  - name: tomato
+    description: ポモドーロタイマ関連のAPI
+paths:
+  /tomato/start:
+     post:
+       summary: "ポモドーロタイマ作成"
+       description: "タイマーを新規作成します。"
+       operationId: "createTimer"
+       tags:
+         - tomato
+       requestBody:
+         required: true
+         content:
+          application/json:
+             schema:
+               $ref: "#/components/schemas/TomatoForm"
+       responses:
+         '201':
+           description: "Created"
+           headers:
+            　location:
+                description: "作成されたリソースのURI"
+                schema:
+                  type: string
+           content:
+             application/json:
+               schema:
+                 $ref: "#/components/schemas/TomatoDTO"
+         '400':
+           description: "Bad Request"
+           content:
+             application/json:
+               schema:
+                 $ref: "#/components/schemas/BadRequestError"
+components:
+  schemas:
+    TomatoForm:
+      type: object
+      properties:
+        pomodoroTime:
+          type: integer
+          description: "ポモドーロタイム"
+      required:
+        - title
+    TomatoDTO:
+      type: object
+      properties:
+        startTime:
+          type: integer
+          description: "開始時刻"
+        endTime:
+          type: integer
+          description: "終了時刻"
+      required:
+        - id
+        - title
+    ResourceNotFoundError:
+      description: "指定したリソースが存在しない"
+      type: object
+      properties:
+        title:
+          type: string
+          description: "エラーのタイトル"
+          default: "Resource Not Found"
+        detail:
+          type: string
+          description: "エラーの詳細"
+      required:
+        - title
+        - detail
+    BadRequestError:
+      description: "リクエストが不正です"
+      type: object
+      properties:
+        title:
+          type: string
+          description: "エラーのタイトル"
+          default: "Bad Request"
+        detail:
+          type: string
+          description: "エラーの詳細"
+          default: "リクエストが不正です。正しいリクエストでリトライしてください。"
+        invalid-params:
+          type: array
+          items:
+            $ref: "#/components/schemas/InvaildParam"
+      required:
+        - title
+        - detail
+        - invalid-params
+    InvaildParam:
+      description: "不正なリクエストについての詳細"
+      type: object
+      properties:
+        name:
+          type: string
+          description: "エラーが発生したフィールド名"
+        reason:
+          type: string
+          description: "エラーの理由"
+      required:
+        - name
+        - reason
+
