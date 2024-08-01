@@ -5,18 +5,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.puipui.tomato.model.TomatoDTO;
 import com.puipui.tomato.model.TomatoForm;
+import com.puipui.tomato.service.TomatoService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class tomatoController implements TomatoApi {
+public class TomatoController implements TomatoApi {
 
-    // private final TomatoService tomatoService;
+    private final TomatoService tomatoService;
 
     @Override
     public ResponseEntity<TomatoDTO> createTimer(TomatoForm tomatoForm) {
-        // var entity = tomatoService.find(pomodoroTime);
+        var entity = tomatoService.find(tomatoForm.getPomodoroTime());
         var dto = new TomatoDTO();
 
         // dto.setId(entity.getId());

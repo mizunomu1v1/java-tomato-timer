@@ -2,7 +2,7 @@ openapi: "3.0.0"
 info:
   title: TOMATO Timer Document
   version: "0.0.1"
-  description: ポモドーロタイマAPIのドキュメントです。
+  description: トマトなAPIのドキュメントだよ～ん。🍅
 tags:
   - name: tomato
     description: ポモドーロタイマ関連のAPI
@@ -23,11 +23,6 @@ paths:
        responses:
          '201':
            description: "Created"
-           headers:
-            　location:
-                description: "作成されたリソースのURI"
-                schema:
-                  type: string
            content:
              application/json:
                schema:
@@ -46,6 +41,7 @@ components:
         pomodoroTime:
           type: integer
           description: "ポモドーロタイム"
+          default: "25"
       required:
         - title
     TomatoDTO:
@@ -54,9 +50,11 @@ components:
         startTime:
           type: integer
           description: "開始時刻"
+          default: "2024/07/30 21:00:00"
         endTime:
           type: integer
           description: "終了時刻"
+          default: "2024/07/30 21:25:00"
       required:
         - id
         - title
