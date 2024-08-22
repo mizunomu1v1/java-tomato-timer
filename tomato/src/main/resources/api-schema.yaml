@@ -8,50 +8,45 @@ tags:
     description: ポモドーロタイマ関連のAPI
 paths:
   /tomato/v1/createTimer:
-     post:
-       summary: "ポモドーロタイマ作成"
-       description: "タイマーを新規作成します。"
-       operationId: "createTimer"
-       tags:
-         - tomato
-       requestBody:
-         required: true
-         content:
+    post:
+      summary: "ポモドーロタイマ作成"
+      description: "タイマーを新規作成します。"
+      operationId: "createTimer"
+      tags:
+        - tomato
+      requestBody:
+        required: true
+        content:
           application/json:
-             schema:
-               $ref: "#/components/schemas/CreateTimerForm"
-       responses:
-         '201':
-           description: "Created"
-           content:
-             application/json:
-               schema:
-                 $ref: "#/components/schemas/CreateTimerDTO"
-         '400':
-           description: "Bad Request"
-           content:
-             application/json:
-               schema:
-                 $ref: "#/components/schemas/BadRequestError"
+            schema:
+              $ref: "#/components/schemas/CreateTimerForm"
+      responses:
+        "201":
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateTimerDTO"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
 components:
   schemas:
     CreateTimerForm:
       type: object
       properties:
         workDuration:
-          type: string 
+          type: integer
           description: "作業時間"
-          default: "15"
         breakDuration:
-          type: string 
+          type: integer
           description: "休憩時間"
-          default: 5
         totalSets:
-          type: string
+          type: integer
           description: "トータルセット数"
-          default: "3"
-          minimum: 2  
-          maximum: 4        
       example:
         workDuration: 15
         breakDuration: 5
@@ -64,13 +59,13 @@ components:
       type: object
       properties:
         timerId:
-          type: string
+          type: integer
           description: "タイマーID"
         sets:
           type: array
           description: "セットリスト"
           items:
-            $ref: "#/components/schemas/setsDTO"            
+            $ref: "#/components/schemas/setsDTO"
       example:
         timerId: 1
         sets:
@@ -90,7 +85,7 @@ components:
         - timerId
         - startWorkTime
         - endWorkTime
-        - endBreakTime        
+        - endBreakTime
     ResourceNotFoundError:
       description: "指定したリソースが存在しない"
       type: object
@@ -129,8 +124,8 @@ components:
         title: "Bad Request"
         detail: "作業時間は必須です。"
         invalidParams:
-        - name: "workDuration"
-          reason: "値が欠落しています"
+          - name: "workDuration"
+            reason: "値が欠落しています"
     InvaildParam:
       description: "不正なリクエストについての詳細"
       type: object
@@ -145,17 +140,17 @@ components:
         - name
         - reason
     setsDTO:
-            type: object
-            properties:
-              set:
-                type: string
-                description: "セット数"
-              startWorkTime:
-                type: string
-                description: "作業開始時刻"
-              endWorkTime:
-                type: string
-                description: "作業終了時刻"
-              endBreakTime:
-                type: string
-                description: "作業終了時刻"
+      type: object
+      properties:
+        set:
+          type: integer
+          description: "セット数"
+        startWorkTime:
+          type: string
+          description: "作業開始時刻"
+        endWorkTime:
+          type: string
+          description: "作業終了時刻"
+        endBreakTime:
+          type: string
+          description: "作業終了時刻"

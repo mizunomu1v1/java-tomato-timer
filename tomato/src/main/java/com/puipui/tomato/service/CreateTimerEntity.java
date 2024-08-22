@@ -6,18 +6,32 @@ import lombok.Data;
 @Data
 public final class CreateTimerEntity extends ValidatableEntity {
 
-    String breakDuration;
-    String workDuration;
-    String totalSets;
+    Integer workDuration;
+    Integer breakDuration;
+    Integer totalSets;
 
-    // 必須チェック: 必須項目が存在すること
+    // エラーチェック
     public void validate() throws CustomValidationException {
-        if (breakDuration == null ||
-                workDuration == null ||
-                totalSets == null) {
-            throw new CustomValidationException("必要なフィールドがnullです");
-        }
+        // 桁数チェック:
+        validateDigitsLength(workDuration, 1, 60, "作業時間は1分～60分の間で設定してね！");
+        validateDigitsLength(breakDuration, 1, 60, "休憩時間は1分～60分の間で設定してね！");
+        validateDigitsLength(totalSets, 1, 10, "セット数は1分～60分の間で設定してね！");
+    }
 
+    /**
+     * 桁数チェック
+     * 
+     * @param value     項目
+     * @param MinLength 最大桁数
+     * @param maxLength 最小桁数
+     * @param message   メッセージ
+     * @return
+     */
+    public boolean validateDigitsLength(Integer value, Integer MinLength, Integer maxLength, String message) {
+        if (value <= MinLength || value >= maxLength) {
+            throw new CustomValidationException(message);
+        }
+        return true;
     }
 
 }
