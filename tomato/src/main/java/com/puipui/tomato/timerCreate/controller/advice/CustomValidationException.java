@@ -1,8 +1,11 @@
-package com.puipui.tomato.service;
+package com.puipui.tomato.timerCreate.controller.advice;
 
-public final class CustomValidationException extends RuntimeException {
+/**
+ * 独自例外クラス
+ */
+public class CustomValidationException extends RuntimeException {
 
-    private final String errorMessage;
+    private String errorMessage;
 
     public CustomValidationException(String errorMessage) {
         this.errorMessage = errorMessage;

@@ -1,4 +1,6 @@
-package com.puipui.tomato.service;
+package com.puipui.tomato.timerCreate.service;
+
+import com.puipui.tomato.timerCreate.controller.advice.CustomValidationException;
 
 import lombok.Data;
 
@@ -15,7 +17,6 @@ public final class CreateTimerEntity extends ValidatableEntity {
         // 桁数チェック:
         validateDigitsLength(workDuration, 1, 60, "作業時間は1分～60分の間で設定してね！");
         validateDigitsLength(breakDuration, 1, 60, "休憩時間は1分～60分の間で設定してね！");
-        validateDigitsLength(totalSets, 1, 10, "セット数は1分～60分の間で設定してね！");
     }
 
     /**

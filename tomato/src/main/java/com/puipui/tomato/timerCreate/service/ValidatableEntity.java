@@ -1,4 +1,4 @@
-package com.puipui.tomato.service;
+package com.puipui.tomato.timerCreate.service;
 
 public abstract class ValidatableEntity {
 

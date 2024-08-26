@@ -86,20 +86,6 @@ components:
         - startWorkTime
         - endWorkTime
         - endBreakTime
-    ResourceNotFoundError:
-      description: "指定したリソースが存在しない"
-      type: object
-      properties:
-        title:
-          type: string
-          description: "エラーのタイトル"
-          default: "Resource Not Found"
-        detail:
-          type: string
-          description: "エラーの詳細"
-      required:
-        - title
-        - detail
     BadRequestError:
       description: "リクエストが不正です"
       type: object
@@ -107,11 +93,12 @@ components:
         title:
           type: string
           description: "エラーのタイトル"
-          default: "Bad Request"
         detail:
           type: string
           description: "エラーの詳細"
-          default: "リクエストが不正です。正しいリクエストでリトライしてください。"
+        status:
+          type: string
+          description: "ステータス"
         invalidParams:
           type: array
           items:
@@ -119,10 +106,12 @@ components:
       required:
         - title
         - detail
+        - status
         - invalidParams
       example:
         title: "Bad Request"
         detail: "作業時間は必須です。"
+        status: "404"
         invalidParams:
           - name: "workDuration"
             reason: "値が欠落しています"
