@@ -1,14 +1,12 @@
 package com.puipui.tomato.timerCreate.service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
-import org.glassfish.jaxb.runtime.v2.runtime.unmarshaller.XsiNilLoader.Array;
-import org.springframework.boot.autoconfigure.web.format.DateTimeFormatters;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.expression.Sets;
 
 import com.puipui.tomato.model.CreateTimerDTO;
 import com.puipui.tomato.model.CreateTimerForm;
@@ -23,56 +21,66 @@ public class CreateTimerService {
 
     public CreateTimerDTO CreateTimer(CreateTimerForm createTimerForm) {
 
-        // 1. パラメータ取得
         // リクエストボディから各パラメータを取得する
         CreateTimerEntity createTimerEntity = new CreateTimerEntity();
         createTimerEntity.setWorkDuration(createTimerForm.getWorkDuration());
         createTimerEntity.setBreakDuration(createTimerForm.getBreakDuration());
         createTimerEntity.setTotalSets(createTimerForm.getTotalSets());
-
-        // システム日時を取得する
-        // LocalDateTime tmpStartTime = LocalDateTime.now();
-        // DateTimeFormatter formatStartTime = DateTimeFormatter.ofPattern("yyyy/MM/dd
-        // HH:mm:ss.SSS");
-        // String startTime = formatStartTime.format(tmpStartTime);
-        String startTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS"));
-
-        // 2. エラーチェック
+        // エラーチェック
         createTimerEntity.validate();
 
-        // 3. 変数作成
-        // sets: setCount分以下を繰り返し配列を作成する
-        ArrayList<SetsDTO> setDto = CreateSets(startTime, createTimerEntity);
+        // DB登録
 
-        // 4. 4. DB登録
-
-        // 5. レスポンスを返却する
+        // レスポンスを返却する
         var dto = new CreateTimerDTO();
-        dto.setSets(setDto);
+        dto.setTimerId(UUID.randomUUID().toString());
+        dto.setSets(CreateSets(createTimerEntity));
         return dto;
     }
 
     /**
-     * 変数作成
+     * 日付フォーマット
      * 
-     * @param startTime
+     * @param localDateTime
+     * @return
+     */
+    public String DateTimeformat(LocalDateTime localDateTime) {
+        return localDateTime.format(
+                DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+    }
+
+    /**
+     * セットリスト作成
+     * 
      * @param createTimerEntity
      * @return
      */
-    public ArrayList<SetsDTO> CreateSets(String startTime, CreateTimerEntity createTimerEntity) {
+    public List<SetsDTO> CreateSets(CreateTimerEntity createTimerEntity) {
+
+        LocalDateTime startWorkLocalDateTime = LocalDateTime.now();
+        LocalDateTime endWorkTimeLocalDateTime;
+        LocalDateTime endbreakTimeLocalDateTime = startWorkLocalDateTime;
 
         // setCount分以下を繰り返し配列を作成する
-        ArrayList<SetsDTO> setsDto = new ArrayList<SetsDTO>();
+        List<SetsDTO> setsDto = new ArrayList<SetsDTO>();
         Integer totalSets = createTimerEntity.getTotalSets();
 
         for (Integer i = 0; totalSets > i; i++) {
-            String startWorkTime = startTime;
-            SetsDTO set = new SetsDTO();
-            set.setSet(i);
-            set.setStartWorkTime(startWorkTime);
-            set.setEndWorkTime(startWorkTime);
-            set.endBreakTime(startWorkTime);
-            setsDto.add(set);
+
+            SetsDTO setDto = new SetsDTO();
+            setDto.setSet(i + 1);
+
+            // 初回以外はendbreakTimeLocalDateTimeをセット
+            if (i != 0) {
+                startWorkLocalDateTime = endbreakTimeLocalDateTime;
+            }
+            endWorkTimeLocalDateTime = startWorkLocalDateTime.plusMinutes(createTimerEntity.workDuration);
+            endbreakTimeLocalDateTime = endWorkTimeLocalDateTime.plusMinutes(createTimerEntity.breakDuration);
+
+            setDto.setStartWorkTime(DateTimeformat(startWorkLocalDateTime));
+            setDto.setEndWorkTime(DateTimeformat(endWorkTimeLocalDateTime));
+            setDto.setEndBreakTime(DateTimeformat(endbreakTimeLocalDateTime));
+            setsDto.add(setDto);
         }
 
         return setsDto;

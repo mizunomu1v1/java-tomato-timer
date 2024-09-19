@@ -59,7 +59,7 @@ components:
       type: object
       properties:
         timerId:
-          type: integer
+          type: string
           description: "タイマーID"
         sets:
           type: array
