@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.puipui.tomato.common.DateUtils;
+import com.puipui.tomato.constants.AppConstants;
+import com.puipui.tomato.constants.TimerStatusConstants;
 import com.puipui.tomato.model.CreateTimerDTO;
 import com.puipui.tomato.model.CreateTimerForm;
 import com.puipui.tomato.model.CreateTimerFormDTO;
@@ -35,7 +37,8 @@ public class CreateTimerService {
         createTimerFormDTO.setTotalSetCount(createTimerForm.getTotalSetCount());
 
         // エラーチェック
-        //createTimerFormDTO.validate();
+        CreateTimerValidator createTimerValidator = new CreateTimerValidator();
+        createTimerValidator.validate(createTimerFormDTO);
 
         // レスポンス作成
         var createTimerDTO = new CreateTimerDTO();
@@ -66,7 +69,7 @@ public class CreateTimerService {
             // 初回以外はendbreakTimeLocalDateTimeをセット
             if (i != 0) {
                 startWorkLocalDateTime = endbreakTimeLocalDateTime;
-                setDetail.setStatusTypeCode("1");
+                setDetail.setStatusTypeCode(TimerStatusConstants.TIMER_STATUS_RUNNING);
             }
             endWorkTimeLocalDateTime = startWorkLocalDateTime.plusMinutes(createTimerFormDTO.getWorkDuration());
             endbreakTimeLocalDateTime = endWorkTimeLocalDateTime.plusMinutes(createTimerFormDTO.getBreakDuration());
@@ -74,7 +77,7 @@ public class CreateTimerService {
             setDetail.setStartWorkDatetime(DateUtils.DateTimeformat(startWorkLocalDateTime));
             setDetail.setEndWorkDatetime(DateUtils.DateTimeformat(endWorkTimeLocalDateTime));
             setDetail.setEndBreakDatetime(DateUtils.DateTimeformat(endbreakTimeLocalDateTime));
-            setDetail.setStatusTypeCode("0");
+            setDetail.setStatusTypeCode(TimerStatusConstants.TIMER_STATUS_RUNNING);
             setDetailList.add(setDetail);
         }
 
@@ -102,9 +105,9 @@ public class CreateTimerService {
             timerInformationEntity.setEndBreakDatetime(setDetail.getEndBreakDatetime());
             timerInformationEntity.setStatusTypeCode(setDetail.getStatusTypeCode());
             timerInformationEntity.setInsertDatetime(DateUtils.DateTimeformat(LocalDateTime.now()));
-            timerInformationEntity.setInsertFunction("timerCreate");
+            timerInformationEntity.setInsertFunction(AppConstants.APP_NAME_TIMER_CREATE);
             timerInformationEntity.setUpdateDatetime(DateUtils.DateTimeformat(LocalDateTime.now()));
-            timerInformationEntity.setUpdateFunction("timerCreate");
+            timerInformationEntity.setUpdateFunction(AppConstants.APP_NAME_TIMER_CREATE);
             timerInformationEntity.setUpdateCount(0);
         }
         // DB登録処理

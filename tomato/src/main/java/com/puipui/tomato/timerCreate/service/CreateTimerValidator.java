@@ -1,22 +1,20 @@
 package com.puipui.tomato.timerCreate.service;
 
+import com.puipui.tomato.model.CreateTimerFormDTO;
 import com.puipui.tomato.timerCreate.controller.advice.CustomValidationException;
+import com.puipui.tomato.validator.CommonValidator;
 
 import lombok.Data;
 
 // final=変更を許さないクラス
 @Data
-public final class bk_CreateTimerEntity extends ValidatableEntity {
-
-    Integer workDuration;
-    Integer breakDuration;
-    Integer totalSets;
+public final class CreateTimerValidator implements CommonValidator<CreateTimerFormDTO> {
 
     // エラーチェック
-    public void validate() throws CustomValidationException {
+    public void validate(CreateTimerFormDTO createTimerFormDTO) throws CustomValidationException {
         // 桁数チェック:
-        validateDigitsLength(workDuration, 1, 60, "作業時間は1分～60分の間で設定してください");
-        validateDigitsLength(breakDuration, 1, 60, "休憩時間は1分～60分の間で設定してください");
+        validateDigitsLength(createTimerFormDTO.getWorkDuration(), 1, 60, "作業時間は1分～60分の間で設定してください");
+        validateDigitsLength(createTimerFormDTO.getBreakDuration(), 1, 60, "休憩時間は1分～60分の間で設定してください");
     }
 
     /**
