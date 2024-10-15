@@ -1,0 +1,8 @@
+<mapper namespace="com.puipui.tomato.timerCreate.mapper.TimerInformationMapper">
+    <insert id="insertTimerInformation" resultType="com.puipui.tomato.model.TimerInformationEntity">
+        SELECT
+        category_id
+        ,name
+        FROM category
+    </insert>
+</mapper>

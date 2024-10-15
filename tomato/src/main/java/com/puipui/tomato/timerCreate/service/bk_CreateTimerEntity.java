@@ -6,7 +6,7 @@ import lombok.Data;
 
 // final=変更を許さないクラス
 @Data
-public final class CreateTimerEntity extends ValidatableEntity {
+public final class bk_CreateTimerEntity extends ValidatableEntity {
 
     Integer workDuration;
     Integer breakDuration;
@@ -15,8 +15,8 @@ public final class CreateTimerEntity extends ValidatableEntity {
     // エラーチェック
     public void validate() throws CustomValidationException {
         // 桁数チェック:
-        validateDigitsLength(workDuration, 1, 60, "作業時間は1分～60分の間で設定してね！");
-        validateDigitsLength(breakDuration, 1, 60, "休憩時間は1分～60分の間で設定してね！");
+        validateDigitsLength(workDuration, 1, 60, "作業時間は1分～60分の間で設定してください");
+        validateDigitsLength(breakDuration, 1, 60, "休憩時間は1分～60分の間で設定してください");
     }
 
     /**

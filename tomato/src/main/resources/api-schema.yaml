@@ -32,7 +32,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BadRequestError"
+                $ref: "#/components/schemas/BadRequestErrorDTO"
 components:
   schemas:
     CreateTimerForm:
@@ -44,40 +44,43 @@ components:
         breakDuration:
           type: integer
           description: "休憩時間"
-        totalSets:
+        totalSetCount:
           type: integer
           description: "トータルセット数"
       example:
         workDuration: 15
         breakDuration: 5
-        totalSets: 3
+        totalSetCount: 3
       required:
         - workDuration
         - breakDuration
-        - totalSets
+        - totalSetCount
+    CreateTimerFormDTO:
+      allOf:
+        - $ref: "#/components/schemas/CreateTimerForm"
     CreateTimerDTO:
       type: object
       properties:
         timerId:
           type: string
           description: "タイマーID"
-        sets:
+        setList:
           type: array
           description: "セットリスト"
           items:
-            $ref: "#/components/schemas/setsDTO"
+            $ref: "#/components/schemas/SetDetail"
       example:
         timerId: 1
-        sets:
-          - set: 1
+        setList:
+          - currentSetCount: 1
             startWorkTime: "2024/07/30 21:15:00"
             endWorkTime: "2024/07/30 21:15:00"
             endBreakTime: "2024/07/30 21:20:00"
-          - set: 2
+          - currentSetCount: 2
             startWorkTime: "2024/07/30 21:20:00"
             endWorkTime: "2024/07/30 21:35:00"
             endBreakTime: "2024/07/30 21:40:00"
-          - set: 3
+          - currentSetCount: 3
             startWorkTime: "2024/07/30 21:40:00"
             endWorkTime: "2024/07/30 21:55:00"
             endBreakTime: "2024/07/30 22:00:00"
@@ -86,7 +89,7 @@ components:
         - startWorkTime
         - endWorkTime
         - endBreakTime
-    BadRequestError:
+    BadRequestErrorDTO:
       description: "リクエストが不正です"
       type: object
       properties:
@@ -102,7 +105,7 @@ components:
         invalidParams:
           type: array
           items:
-            $ref: "#/components/schemas/InvaildParam"
+            $ref: "#/components/schemas/InvaildDetail"
       required:
         - title
         - detail
@@ -115,7 +118,7 @@ components:
         invalidParams:
           - name: "workDuration"
             reason: "値が欠落しています"
-    InvaildParam:
+    InvaildDetail:
       description: "不正なリクエストについての詳細"
       type: object
       properties:
@@ -128,18 +131,60 @@ components:
       required:
         - name
         - reason
-    setsDTO:
+    SetDetail:
       type: object
       properties:
-        set:
+        currentSetCount:
           type: integer
-          description: "セット数"
-        startWorkTime:
+          description: "現在のセット数"
+        startWorkDatetime:
           type: string
-          description: "作業開始時刻"
-        endWorkTime:
+          description: "作業開始日時分秒"
+        endWorkDatetime:
           type: string
-          description: "作業終了時刻"
-        endBreakTime:
+          description: "作業終了日時分秒"
+        endBreakDatetime:
           type: string
-          description: "作業終了時刻"
+          description: "休憩終了日時分秒"
+        statusTypeCode:
+          type: string
+          description: "ステータス"
+    TimerInformationEntity:
+      type: object
+      properties:
+        timerId:
+          type: string
+          description: "タイマーID"
+        currentSetCount:
+          type: integer
+          description: "現在のセット数"
+        totalSetCount:
+          type: integer
+          description: "トータルセット数"
+        startWorkDatetime:
+          type: string
+          description: "作業開始日時分秒"
+        endWorkDatetime:
+          type: string
+          description: "終了開始日時分秒"
+        endBreakDatetime:
+          type: string
+          description: "休憩終了日時分秒"
+        statusTypeCode:
+          type: string
+          description: "ステータス"
+        insertDatetime:
+          type: string
+          description: "登録日時分秒"
+        insertFunction:
+          type: string
+          description: "登録機能"
+        updateDatetime:
+          type: string
+          description: "更新日時分秒"
+        updateFunction:
+          type: string
+          description: "更新機能"
+        updateCount:
+          type: integer
+          description: "更新回数"

@@ -1,18 +1,17 @@
 package com.puipui.tomato.timerCreate.controller.advice;
 
-import org.apache.catalina.connector.Response;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.puipui.tomato.model.BadRequestError;
-import com.puipui.tomato.model.InvaildParam;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-
-import java.util.*;
+import com.puipui.tomato.model.BadRequestErrorDTO;
+import com.puipui.tomato.model.InvaildDetail;
 
 /**
  * 例外ハンドリング
@@ -34,15 +33,15 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
      * @return
      */
     @ExceptionHandler(CustomValidationException.class)
-    public ResponseEntity<BadRequestError> handleNotFoundException(
+    public ResponseEntity<BadRequestErrorDTO> handleNotFoundException(
             CustomValidationException ex) {
-        BadRequestError error = new BadRequestError();
+        BadRequestErrorDTO error = new BadRequestErrorDTO();
 
-        List<InvaildParam> invaildParam = new ArrayList<>();
-        invaildParam.add(null);
+        List<InvaildDetail> invaildDetail = new ArrayList<>();
+        invaildDetail.add(null);
 
         error.setDetail(ex.getMessage());
-        error.setInvalidParams(invaildParam);
+        error.setInvalidParams(invaildDetail);
         return ResponseEntity.status(NOT_FOUND).body(error);
 
     }
