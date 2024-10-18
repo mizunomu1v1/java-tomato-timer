@@ -1,8 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.puipui.tomato.timerCreate.mapper.TimerInformationMapper">
-    <insert id="insertTimerInformation" resultType="com.puipui.tomato.model.TimerInformationEntity">
-        SELECT
-        category_id
-        ,name
-        FROM category
-    </insert>
+    <insert id="insertTimerInformation"> INSERT INTO T_TIMER_INFORMATION ( timer_id
+        ,current_set_count ,total_set_count ,start_work_datetime ,end_work_datetime
+        ,status_type_code ,insert_datetime ,insert_function ,update_datetime ,update_function
+        ,update_count ) VALUES( #{timerId} ,#{currentSetCount} ,#{total_set_count}
+        ,#{start_work_datetime} ,#{end_work_datetime} ,#{status_type_code} ,#{insert_datetime}
+        ,#{insert_function} ,#{update_datetime} ,#{update_function} ,#{update_count} ); </insert>
 </mapper>
